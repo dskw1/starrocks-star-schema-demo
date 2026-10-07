@@ -1,0 +1,14 @@
+services:
+  starrocks:
+    image: starrocks/allin1-ubuntu:3.3-latest
+    container_name: starrocks
+    ports:
+      - "9030:9030"   # MySQL protocol (queries)
+      - "8030:8030"   # FE HTTP (stream load, web UI)
+      - "8040:8040"   # BE HTTP (stream load redirect target)
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -h127.0.0.1 -P9030 -uroot -e 'SHOW BACKENDS' | grep -q true"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
